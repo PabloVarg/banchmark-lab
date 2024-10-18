@@ -1,0 +1,5 @@
+{
+    "*": {
+        "start": "make docker-start"
+    }
+}
