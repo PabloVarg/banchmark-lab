@@ -1,6 +1,7 @@
 services:
   grafana:
     image: grafana/grafana
+    container_name: grafana
     volumes:
       - grafana-storage:/var/lib/grafana
     ports:
@@ -28,6 +29,21 @@ services:
     - /var/run:/var/run:rw
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
+
+  server:
+    build:
+        dockerfile: configs/Dockerfile
+        context: .
+    container_name: server
+    ports:
+        - 8000
+
+  client:
+    build:
+        dockerfile: configs/Dockerfile
+        context: .
+    container_name: client
+    entrypoint: client
 
 volumes:
   grafana-storage:

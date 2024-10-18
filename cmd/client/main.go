@@ -30,7 +30,7 @@ func run(logger *slog.Logger, workers int) {
 
 	for range workers {
 		group.Go(func() error {
-			if err := RepeatDialHealth(ctx, "http://localhost:8000/health", dialer, logger, time.Second); err != nil {
+			if err := RepeatDialHealth(ctx, "http://server:8000/health", dialer, logger, time.Second); err != nil {
 				logger.Error("error dialing", "err", err)
 				return err
 			}

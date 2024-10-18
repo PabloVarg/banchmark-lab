@@ -8,5 +8,5 @@ start-client:
 
 .PHONY: docker-start
 docker-start:
-	@ docker compose up --remove-orphans
+	@ docker compose up --build --remove-orphans
 	@ docker compose down --remove-orphans
