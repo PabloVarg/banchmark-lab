@@ -30,13 +30,17 @@ func run(logger *slog.Logger, port int) {
 		IdleTimeout:  time.Minute,
 	}
 
+	wg.Add(1)
 	go shutdown(ctx, &wg, logger, &server)
 
 	logger.InfoContext(ctx, "server listening", "port", port)
 	if err := server.ListenAndServe(); err != nil {
-		logger.Error("error stopping server", "err", err)
+		logger.Error("server exited unexpectedly", "err", err)
 		return
 	}
+
+	logger.Info("closing resources")
+	wg.Wait()
 }
 
 func shutdown(ctx context.Context, wg *sync.WaitGroup, logger *slog.Logger, server *http.Server) {

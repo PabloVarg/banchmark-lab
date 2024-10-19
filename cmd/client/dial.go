@@ -14,12 +14,18 @@ func DialHealth(ctx context.Context, addr string, dialer http.Client, logger *sl
 		return err
 	}
 
+	startTime := time.Now()
+
 	response, err := dialer.Do(req)
 	if err != nil {
+		serverHitsFailed.Inc()
 		return err
 	}
 	defer response.Body.Close()
 
+	requestLatency.Observe(float64(time.Since(startTime).Milliseconds()))
+
+	serverHits.Inc()
 	io.Copy(io.Discard, response.Body)
 
 	return nil
