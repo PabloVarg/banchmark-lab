@@ -23,6 +23,11 @@ func DialHealth(ctx context.Context, addr string, dialer http.Client, logger *sl
 	}
 	defer response.Body.Close()
 
+	if response.StatusCode != http.StatusOK {
+		serverHitsFailed.Inc()
+		return nil
+	}
+
 	requestLatency.Observe(float64(time.Since(startTime).Milliseconds()))
 
 	serverHits.Inc()
